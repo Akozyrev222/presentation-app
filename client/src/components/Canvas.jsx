@@ -19,7 +19,7 @@ const Canvas = () => {
 
     useEffect(() => {
         if (canvasState.username) {
-            const socket = new WebSocket('ws://localhost:4000/')
+            const socket = new WebSocket('wss://presentation-app-server.onrender.com')
             canvasState.setSocket(socket)
             canvasState.setSessionId(params.id)
             socket.onopen = () => {
