@@ -5,6 +5,7 @@ import toolState from "../store/toolState.js";
 import Brush from "../tools/Brush.js";
 import {Button, Modal} from "react-bootstrap";
 import {useParams} from "react-router-dom";
+import Rect from "../tools/Rect.js";
 
 const Canvas = () => {
     const canvasRef = useRef()
@@ -14,7 +15,6 @@ const Canvas = () => {
 
     useEffect(() => {
         canvasState.setCanvas(canvasRef.current)
-        toolState.setTool(new Brush(canvasRef.current))
     }, []);
 
     useEffect(() => {
@@ -22,6 +22,7 @@ const Canvas = () => {
             const socket = new WebSocket('wss://presentation-app-server.onrender.com')
             canvasState.setSocket(socket)
             canvasState.setSessionId(params.id)
+            toolState.setTool(new Brush(canvasRef.current, socket, params.id))
             socket.onopen = () => {
                 console.log('send')
                 socket.send(JSON.stringify({
@@ -44,7 +45,19 @@ const Canvas = () => {
     }, [canvasState.username]);
 
     const drawHandler = (msg) => {
-
+        const figure = msg.figure
+        const ctx = canvasRef.current.getContext('2d')
+        switch (figure.type) {
+            case "brush":
+                Brush.draw(ctx, figure.x, figure.y)
+                break
+            case "rect":
+                Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height)
+                break
+            case "finish":
+                ctx.beginPath()
+                break
+        }
     }
 
     const mouseDownHandler = () => {

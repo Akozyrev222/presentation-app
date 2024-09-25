@@ -20,13 +20,16 @@ const Toolbar = () => {
 
     return (
         <div className='toolbar'>
-            <button className='toolbar__btn' onClick={() => toolState.setTool(new Brush(canvasState.canvas))}>
+            <button className='toolbar__btn'
+                    onClick={() => toolState.setTool(new Brush(canvasState.canvas, canvasState.socket, canvasState.sessionid))}>
                 <FaPaintBrush size={25}/>
             </button>
-            <button className='toolbar__btn' onClick={() => toolState.setTool(new Rect(canvasState.canvas))}>
+            <button className='toolbar__btn'
+                    onClick={() => toolState.setTool(new Rect(canvasState.canvas, canvasState.socket, canvasState.sessionid))}>
                 <MdRectangle size={25}/>
             </button>
-            <button className='toolbar__btn' onClick={() => toolState.setTool(new Circle(canvasState.canvas))}>
+            <button className='toolbar__btn'
+                    onClick={() => toolState.setTool(new Circle(canvasState.canvas))}>
                 <FaRegCircle size={25}/>
             </button>
             <button className='toolbar__btn' onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}>
