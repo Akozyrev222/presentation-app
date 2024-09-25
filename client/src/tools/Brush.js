@@ -1,8 +1,8 @@
 import Tool from "./Tool.js";
 
 export default class Brush extends Tool {
-    constructor(canvas) {
-        super(canvas)
+    constructor(canvas, socket, sessionid) {
+        super(canvas, socket, sessionid)
         this.listen()
     }
 

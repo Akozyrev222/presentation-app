@@ -2,8 +2,11 @@ import {makeObservable} from "mobx";
 
 class CanvasState {
     canvas = null
+    socket = null
+    sessionid = null
     undoList = []
     redoList = []
+    username = ''
 
     constructor() {
         makeObservable(this)
@@ -13,8 +16,19 @@ class CanvasState {
         this.canvas = canvas
     }
 
+    setSessionId(id) {
+        this.sessionid = id
+    }
+
+    setSocket(socket) {
+        this.socket = socket
+    }
+
+    setUsername(username) {
+        this.username = username
+    }
+
     pushToUndo(data) {
-        console.log(data, 'here')
         this.undoList.push(data)
     }
 
