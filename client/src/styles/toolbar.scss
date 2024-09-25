@@ -8,6 +8,21 @@
   position: absolute;
   width: 100vw;
   box-shadow: 0 4px 5px gray;
+  z-index: 999;
+  &__btn{
+    height: 25px;
+    width: 25px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  .left{
+    margin-left: auto;
+  }
+  .right{
+    margin-right: 10px;
+  }
 }
 .setting-bar{
   height: $toolbar-height;
@@ -17,4 +32,5 @@
   position: absolute;
   width: 100vw;
   box-shadow: 0 4px 5px gray;
+  top: $toolbar-height
 }
