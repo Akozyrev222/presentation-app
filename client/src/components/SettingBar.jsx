@@ -1,9 +1,10 @@
 import React from 'react';
+import '../styles/toolbar.scss'
 
 const SettingBar = () => {
     return (
-        <div>
-            
+        <div className='toolbar' style={{top: 40}}>
+
         </div>
     );
 };
