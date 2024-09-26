@@ -5,12 +5,15 @@ const aWss = WSServer.getWss()
 const cors = require('cors')
 const fs = require('fs')
 const path = require('path')
+const {uploadStorage, downloadStorage} = require('./middleware/storage')
+require('dotenv').config()
 
 
 const PORT = process.env.PORT || 4000
 
 app.use(cors())
 app.use(express.json())
+
 app.ws('/', (ws, res) => {
     console.log('Connected')
     ws.on('message', (msg) => {
@@ -26,19 +29,23 @@ app.ws('/', (ws, res) => {
     })
 })
 
-app.post('/image', (req, res) => {
+
+app.post('/image', async (req, res) => {
     try {
-        const data = req.body.img.replace('data:image/png;base64,', '')
-        fs.writeFileSync(path.resolve(__dirname, 'files', `${req.query.id}.jpg`), data, 'base64')
-        return res.status(200).json({message: 'Success upload'})
+        const data = req.body.img
+        const upload_file = await uploadStorage(data, `${req.query.id}.jpg`)
+        return res.status(200).json(upload_file)
     } catch (e) {
         console.log(e)
         return res.status(500).json(e)
     }
 })
-app.get('/image', (req, res) => {
+app.get('/image', async (req, res) => {
     try {
-
+        res.header("Access-Control-Allow-Origin", "*");
+        const name =  `${req.query.id}.jpg`
+        const downloaded_file = await downloadStorage(name)
+        return res.status(200).json(downloaded_file)
     } catch (e) {
         console.log(e)
         return res.status(500).json(e)

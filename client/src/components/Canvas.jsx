@@ -7,6 +7,7 @@ import {Button, Modal} from "react-bootstrap";
 import {useParams} from "react-router-dom";
 import Rect from "../tools/Rect.js";
 import axios from "axios";
+import {BASE_URL_DEV, BASE_URL_PROD} from "../constants.js";
 
 const Canvas = () => {
     const canvasRef = useRef()
@@ -16,6 +17,21 @@ const Canvas = () => {
 
     useEffect(() => {
         canvasState.setCanvas(canvasRef.current)
+        axios.get(`${BASE_URL_DEV}/image?id=${params.id}`, {
+            headers: {
+                "Access-Control-Allow-Origin": '*'
+            }
+        })
+            .then(response => {
+                const img = new Image()
+                const ctx = canvasRef.current.getContext('2d')
+                img.crossOrigin = "anonymous"
+                img.src = response.data
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+                    ctx.drawImage(img, 0, 0, canvasRef.current.width, canvasRef.current.height)
+                }
+            })
     }, []);
 
     useEffect(() => {
@@ -62,9 +78,12 @@ const Canvas = () => {
     }
 
     const mouseDownHandler = () => {
+    }
+    const mouseUpHandler = () => {
         canvasState.pushToUndo(canvasRef.current.toDataURL())
-        axios.post(`https://presentation-app-server.onrender.com/image?id=${params.id}`, {img: canvasRef.current.toDataURL()})
-            .then((response)=> console.log(response.data))
+        axios.post(`${BASE_URL_PROD}/image?id=${params.id}`, {img: canvasRef.current.toDataURL()})
+            .then((response) => console.log(response.data))
+
     }
     const connectionHandler = () => {
         canvasState.setUsername(usernameRef.current.value)
@@ -86,7 +105,12 @@ const Canvas = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <canvas onMouseDown={mouseDownHandler} ref={canvasRef} width={600} height={400}></canvas>
+            <canvas onMouseDown={mouseDownHandler}
+                    onMouseUp={mouseUpHandler}
+                    ref={canvasRef}
+                    width={800}
+                    height={600}
+            />
         </div>
     );
 };
