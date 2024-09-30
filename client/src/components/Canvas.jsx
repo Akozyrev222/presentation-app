@@ -7,7 +7,7 @@ import {Button, Modal} from "react-bootstrap";
 import {useParams} from "react-router-dom";
 import Rect from "../tools/Rect.js";
 import axios from "axios";
-import {BASE_URL_DEV, BASE_URL_PROD} from "../constants.js";
+import {BASE_URL_DEV} from "../constants.js";
 
 const Canvas = () => {
     const canvasRef = useRef()
@@ -81,7 +81,7 @@ const Canvas = () => {
     }
     const mouseUpHandler = () => {
         canvasState.pushToUndo(canvasRef.current.toDataURL())
-        axios.post(`${BASE_URL_PROD}/image?id=${params.id}`, {img: canvasRef.current.toDataURL()})
+        axios.post(`${BASE_URL_DEV}/image?id=${params.id}`, {img: canvasRef.current.toDataURL()})
             .then((response) => console.log(response.data))
 
     }
